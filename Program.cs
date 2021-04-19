@@ -53,7 +53,7 @@ namespace Slutprojektet
                         }
                         else if (i == 3)
                         {
-                            Console.WriteLine("fucking five in a goddang horizontal row on y-axis " + y);
+                            Console.WriteLine("oh wow five in a horizontal row on y-axis " + y);
                         }
                         else
                         {
