@@ -8,6 +8,13 @@ namespace Slutprojektet
     {
         static void Main(string[] args)
         {
+            /*
+            Att fixa:
+            - så att ClearMatches faktiskt tar bort ur rutnätet
+            - queues per rad som är 5 långa hela tiden och är redo att lägga till nya godisar
+            - faktisk tilläggning av nya godisar genom "gravity" oooo
+            - the miracle of interaction with the actual game
+            */
 
             Random generator = new Random();
             Queue<Match> matches = new Queue<Match>();
@@ -146,9 +153,9 @@ namespace Slutprojektet
 
         static void ClearMatches(Queue<Match> m)
         {
-                System.Console.WriteLine(m.Count);
+            int qLength = m.Count;
 
-            for (int i = 0; i < m.Count+1; i++)
+            for (int i = 0; i < qLength; i++)
             {
                 /*Match currentMatch;
                 bool y = m.TryDequeue(out currentMatch);*/
