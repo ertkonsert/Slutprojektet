@@ -7,18 +7,19 @@ namespace Slutprojektet
     {
         static Random generator = new Random();
 
-        string[] colors = {"red", "green", "yellow", "blue",};
+        string[] colors = {"red", "green", "yellow",};
+        
 
-        string color;
+        public string color;
         int x = 0;
         int y = 0;
 
-        public static Candy[,] grid = new Candy[10, 10];
+        public static Candy[,] grid = new Candy[5,5];
 
         public Candy()
         {
-            color = colors[generator.Next(4)];
-            grid[x,y] = this;
+            color = colors[generator.Next(3)];
+            //grid[x,y] = this;
         }
 
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Raylib_cs;
 
 namespace Slutprojektet
@@ -9,129 +10,155 @@ namespace Slutprojektet
         {
 
             Random generator = new Random();
+            Queue<Match> matches = new Queue<Match>();
 
-            int[,] grid = new int[5,5];
-
-            for (int y = 0; y < grid.GetLength(1); y++)
+            //skapar godisar på varje plats i rutnätet
+            for (int y = 0; y < Candy.grid.GetLength(1); y++)
             {
-                for (int x = 0; x < grid.GetLength(0); x++)
+                for (int x = 0; x < Candy.grid.GetLength(0); x++)
                 {
-                    grid[x,y] = generator.Next(3);
+                    Candy.grid[x,y] = new Candy();
                 }
             }
 
-            for (int y = 0; y < grid.GetLength(1); y++)
+            //skriver ut rutnätet med godisarna i
+            for (int y = 0; y < Candy.grid.GetLength(1); y++)
             {
-                for (int x = 0; x < grid.GetLength(0); x++)
+                for (int x = 0; x < Candy.grid.GetLength(0); x++)
                 {
-                    if(x == grid.GetLength(0)-1)
+                    if(x == Candy.grid.GetLength(0)-1)
                     {
-                        Console.WriteLine(grid[x,y]);
+                        Console.WriteLine(Candy.grid[x,y].color);
                     }
                     else
                     {
-                        Console.Write(grid[x,y]);
+                        Console.Write(Candy.grid[x,y].color + " ");
                     }
                 }
             }
 
+            matches = CheckMatches(matches);
+            Console.ReadLine();
+            ClearMatches(matches);
+
+            Console.ReadLine();
+            
+            
+        }
+
+        //kollar om det är fler än 3 godisar av samma färg i rad 
+        static Queue<Match> CheckMatches(Queue<Match> m)
+        {
+            
+            
+
             int i = 0;
+            //endast för att skriva ut färgen i debugging texten
+            string color = "";
+            
 
-
-            for (int y = 0; y < grid.GetLength(1); y++)
+            //horisontellt
+            for (int y = 0; y < Candy.grid.GetLength(1); y++)
             {
-                for (int x = 1; x < grid.GetLength(0)-1; x++)
+                
+                for (int x = 1; x < Candy.grid.GetLength(0)-1; x++)
                 {
-                    System.Console.WriteLine("i = " + i + "x = " + x);
-                    if(grid[x,y] == grid[x-1,y] && grid[x,y] == grid[x+1,y])
+                    //kollar om det finns 3 godisar av samma färg i rad, lägg isåfall till 1 i räknaren i
+                    if(Candy.grid[x,y].color == Candy.grid[x-1,y].color && Candy.grid[x,y].color == Candy.grid[x+1,y].color)
                     {
                         i++;
-
-                        if (i == 2)
+                        color = Candy.grid[x,y].color;
+                        //lägger till i kön om det är en match 
+                        if(i==1)
                         {
-                            Console.WriteLine("Four in a horizontal row on x-axis " + x  + " y-axis " + y);
+                            m.Enqueue(new Match(x, y, Candy.grid[x,y].color));
                         }
-                        else if (i == 3)
-                        {
-                            Console.WriteLine("oh wow five in a horizontal row on y-axis " + y);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Three in a horizontal row on x-axis " + x + " y-axis " + y);
-                        }
-                        
-                        
-
                     }
-                    if (x == 3)
-                    {
-                        i = 0;
-                    }
+                    
                 }
+                //beroende på i:s värde var det antingen 3, 4 eller 5 i rad. nope är bara med för att underlätta för mig att hitta på vilken rad det är
+                if (i == 1)
+                {
+                    Console.WriteLine("tre i rad av " + color);
+                    
+                }
+                else if (i == 2)
+                {
+                    Console.WriteLine("fyra i rad av " + color);
+                }
+                else if (i == 3)
+                {
+                    Console.WriteLine("fem i rad av " + color);
+                }
+                else
+                {
+                    Console.WriteLine("nope");
+                }
+                
+                i = 0;
             }
 
             i = 0;
-
-            for (int y = 1; y < grid.GetLength(1)-1; y++)
+            System.Console.WriteLine("WE CHECKING VERTICAL NOW ALRIGHT");
+            //vertikalt, omvänt här att den kollar "åt andra hållet", alltså kolumner från vänster till höger istället för rader uppifrån och ned.
+            for (int x = 0; x < Candy.grid.GetLength(0); x++)
             {
-                for (int x = 0; x < grid.GetLength(0); x++)
+                for (int y = 1; y < Candy.grid.GetLength(1)-1; y++)
                 {
 
-                    if(grid[x,y] == grid[x,y-1] && grid[x,y] == grid[x,y+1])
+                    if(Candy.grid[x,y].color == Candy.grid[x,y-1].color && Candy.grid[x,y].color == Candy.grid[x,y+1].color)
                     {
                         i++;
-
-                        if (i == 2)
+                        color = Candy.grid[x,y].color;
+                        //lägger till i kön om det är en match
+                        if(i==1)
                         {
-                            Console.WriteLine("Four in a vertical row on x-axis " + x  + " y-axis " + y);
+                            m.Enqueue(new Match(x, y, Candy.grid[x,y].color));
                         }
-                        else if (i == 3)
-                        {
-                            Console.WriteLine("fucking five in a goddang vertical row on y-axis " + y);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Three in a vertical row on x-axis " + x + " y-axis " + y);
-                        }
-                        
-                        
-
                     }
-                    if (x == 3)
-                    {
-                        i = 0;
-                    }
+                    
+                    
                 }
-            }
 
-            /*Candy test = new Candy();
-
-            for (int y = 0; y < Candy.grid.GetLength(1); y++)
-{
-  for (int x = 0; x < Candy.grid.GetLength(0); x++)
-  {
-    Candy.grid[x, y] = test;
-  }
-}*/
-Console.ReadLine();
-            /*
-            Raylib.InitWindow(700, 800, "Candy Crush, but with worse graphics");
-
-
-            while (!Raylib.WindowShouldClose())
-            {
+                //beroende på i:s värde var det antingen 3, 4 eller 5 i rad. nope är bara med för att underlätta för mig att hitta på vilken rad det är
+                if (i == 1)
+                {
+                    Console.WriteLine("tre i rad av " + color);
+                }
+                else if (i == 2)
+                {
+                    Console.WriteLine("fyra i rad av " + color);
+                }
+                else if (i == 3)
+                {
+                    Console.WriteLine("fem i rad av " + color);
+                }
+                else
+                {
+                    Console.WriteLine("nope");
+                }
                 
-                Raylib.BeginDrawing();
-
-                Raylib.ClearBackground(Color.PINK);
-
-                Raylib.EndDrawing();
-
-
-
+                i = 0;
             }
-*/
-            
+
+            return m;
         }
+
+        static void ClearMatches(Queue<Match> m)
+        {
+                System.Console.WriteLine(m.Count);
+
+            for (int i = 0; i < m.Count+1; i++)
+            {
+                /*Match currentMatch;
+                bool y = m.TryDequeue(out currentMatch);*/
+                Console.WriteLine(m.Dequeue().color);
+            }
+            
+
+
+        }
+
+
     }
 }
