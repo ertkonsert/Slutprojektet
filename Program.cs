@@ -299,6 +299,7 @@ namespace Slutprojektet
                         PrintGrid();
                         Console.ReadLine();
                         currentMatch.y--;
+                    }
                 }
                 
             }
