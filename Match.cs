@@ -4,16 +4,19 @@ namespace Slutprojektet
 {
     public class Match
     {
-        int x;
-        int y;
+        public int x;
+        public int y;
+        public string orientation = "";
         public string color = "";
+        public int length;
 
-        public Match(int bigX, int bigY, string c)
+        public Match(string o, int coordX, int coordY, string c, int l)
         {
-            x = bigX;
-            y = bigY;
+            x = coordX;
+            y = coordY;
             color = c;
-            
+            length = l;
+            orientation = o;
         }
 
     }
