@@ -10,8 +10,8 @@ namespace Slutprojektet
         {
             /*
             Att fixa:
-            - så att ClearMatches faktiskt tar bort ur rutnätet
-            - queues per rad som är 5 långa hela tiden och är redo att lägga till nya godisar
+            - så att ClearMatches faktiskt tar bort ur rutnätet, FUNKAR på horisontella matcher
+            - queues per rad som är 5 långa hela tiden och är redo att lägga till nya godisar.... no
             - faktisk tilläggning av nya godisar genom "gravity" oooo
             - the miracle of interaction with the actual game
             */
