@@ -11,7 +11,7 @@ namespace Slutprojektet
             /*
             Att fixa:
             - så att ClearMatches faktiskt tar bort ur rutnätet, FUNKAR på horisontella matcher
-            - queues per rad som är 5 långa hela tiden och är redo att lägga till nya godisar.... no
+            - queues per rad som är 5 långa hela tiden och är redo att lägga till nya godisar  ....no
             - faktisk tilläggning av nya godisar genom "gravity" oooo
             - the miracle of interaction with the actual game
             */
@@ -52,7 +52,7 @@ namespace Slutprojektet
             System.Console.WriteLine("no matches found!");
             
             
-            
+            Console.WriteLine();
             Console.ReadLine();
             
             
@@ -117,6 +117,10 @@ namespace Slutprojektet
 
             l = 0;
             int currentY = 0;
+
+            //clearar horisontella matcher först för att de vertikalas y-värde inte ska kunna ändras efter de har checkats
+            ClearMatches(m);
+
             //vertikalt, omvänt här att den kollar "åt andra hållet", alltså kolumner från vänster till höger istället för rader uppifrån och ned.
             for (int x = 0; x < Candy.grid.GetLength(0); x++)
             {
@@ -177,15 +181,19 @@ namespace Slutprojektet
                         //kollar efter fler i rad nedåt
                         if (currentMatch.y < 4 && Candy.grid[currentMatch.x + i, currentMatch.y + 1].color == currentMatch.color)
                         {
+                            Console.WriteLine("found 1 down on x = " + currentMatch.x + i);
                             adjacentVertical++;
                             if (currentMatch.y < 3 && Candy.grid[currentMatch.x + i, currentMatch.y + 2].color == currentMatch.color)
                             {
+                                Console.WriteLine("found 2 down on x = " + currentMatch.x + i);
                                 adjacentVertical++;
                                 if (currentMatch.y < 2 && Candy.grid[currentMatch.x + i, currentMatch.y + 3].color == currentMatch.color)
                                 {
+                                    Console.WriteLine("found 3 down on x = " + currentMatch.x + i);
                                     adjacentVertical++;
                                     if (currentMatch.y < 1 && Candy.grid[currentMatch.x + i, currentMatch.y + 4].color == currentMatch.color)
                                     {
+                                        Console.WriteLine("found 4 down on x = " + currentMatch.x + i);
                                         adjacentVertical++;
                                     }
                                 }
@@ -195,22 +203,26 @@ namespace Slutprojektet
                         else
                             {
                                 System.Console.WriteLine("negative");
+                                
                             }
                         //kollar efter fler i rad uppåt.
                         System.Console.WriteLine("currently checking up from x = " + currentMatch.x + i);
                         if (currentMatch.y > 0 && Candy.grid[currentMatch.x + i, currentMatch.y - 1].color == currentMatch.color)
                         {
-                            
+                            Console.WriteLine("found 1 up on x = " + currentMatch.x + i);
 
                             adjacentVertical++;
                             if (currentMatch.y > 1 && Candy.grid[currentMatch.x + i, currentMatch.y - 2].color == currentMatch.color)
                             {
+                                Console.WriteLine("found 2 up on x = " + currentMatch.x + i);
                                 adjacentVertical++;
                                 if (currentMatch.y > 2 && Candy.grid[currentMatch.x + i, currentMatch.y - 3].color == currentMatch.color)
                                 {
+                                    Console.WriteLine("found 3 up on x = " + currentMatch.x + i);
                                     adjacentVertical++;
                                     if (currentMatch.y > 3 && Candy.grid[currentMatch.x + i, currentMatch.y - 4].color == currentMatch.color)
                                     {
+                                        Console.WriteLine("found 4 up on x = " + currentMatch.x + i);
                                         adjacentVertical++;
                                     }
                                 }
@@ -224,6 +236,7 @@ namespace Slutprojektet
 
                         if (adjacentVertical > 1)
                         {
+                            //lägger till vart det har korsats i en lista för att kunna lagra flera korsningar och checka mot dem senare.
                             crossLocations.Add(currentMatch.x + i);
                             System.Console.WriteLine("THERE's BEEN A CROSSING ");
                         }
@@ -271,35 +284,54 @@ namespace Slutprojektet
                 //hanterar clearing av vertikala matcher
                 if (currentMatch.orientation == "vertical")
                 {
-                    while (currentMatch.y > -1)
+
+                    //om y är 1 är matchen så långt upp i rutnätet den kan vara och därmed behöver alla godisar vara nygenererade.
+                    if (currentMatch.y == 1)
                     {
-                        //
-                        for (int i = 0; i < currentMatch.length; i++)
+                        for (int i = -1; i < currentMatch.length - 1; i++)
+                        {
+                                
+                            Candy.grid[currentMatch.x, currentMatch.y + i] = new Candy();
+                            
+                        }
+                    }
+                        
+                    else if (currentMatch.y == 2)
+                    {
+                        //flyttar ned godisen över matchen till platsen längst ned i matchen
+                        Candy.grid[currentMatch.x, currentMatch.y + currentMatch.length - 2] = Candy.grid[currentMatch.x, currentMatch.y - 2];
+
+                        //genererar nya godisar för resten av platserna i matchen
+                        for (int i = -2; i < currentMatch.length - 2; i++)
                         {
                             
-                            if (currentMatch.y > 0)
-                            {
-                                //flyttar ner godisar från raden över
-                               Candy.grid[currentMatch.x, currentMatch.y] = Candy.grid[currentMatch.x, currentMatch.y-1];
+                            Candy.grid[currentMatch.x, currentMatch.y + i] = new Candy();
                             
-                            }
-                            else
-                            {
-                                //när currentMatch.y < 0 är vi längst upp och då behöver det genereras nya godisar eftersom det inte finns en rad ovanför 
-                                Candy.grid[currentMatch.x -1 + i, currentMatch.y] = new Candy();
-                            }
-                            
-                            
-                         
                         }
-                        
-                        System.Console.WriteLine("current iteration:");
-                        System.Console.WriteLine("y = " + currentMatch.y);
-                        System.Console.WriteLine();
-                        PrintGrid();
-                        Console.ReadLine();
-                        currentMatch.y--;
                     }
+
+                    else if (currentMatch.y == 3)
+                    {
+                        //flyttar ned godisen över matchen till platsen längst ned i matchen
+                        Candy.grid[currentMatch.x, currentMatch.y + currentMatch.length - 2] = Candy.grid[currentMatch.x, currentMatch.y - 2];
+                        //flyttar ned godisen längst upp i rutnätet till näst längst ned
+                        Candy.grid[currentMatch.x, currentMatch.y] = Candy.grid[currentMatch.x, currentMatch.y - 3];
+
+                        //genererar nya godisar för resten av platserna i matchen
+                        for (int i = -3; i < currentMatch.length - 3; i++)
+                        {
+                                
+                             Candy.grid[currentMatch.x, currentMatch.y + i] = new Candy();
+                            
+                        }
+                    }
+                        
+                    System.Console.WriteLine("y should be good now:");
+                    System.Console.WriteLine();
+                    PrintGrid();
+                    Console.ReadLine();
+                        
+                    
                 }
                 
             }

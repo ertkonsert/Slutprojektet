@@ -7,7 +7,7 @@ namespace Slutprojektet
     {
         static Random generator = new Random();
 
-        string[] colors = {"red   ", "green ", "yellow",};
+        string[] colors = {"red    ", "green  ", "yellow ", "blue   "};
         
 
         public string color;
@@ -17,7 +17,7 @@ namespace Slutprojektet
 
         public Candy()
         {
-            color = colors[generator.Next(3)];
+            color = colors[generator.Next(colors.Length)];
             //grid[x,y] = this;
         }
 
