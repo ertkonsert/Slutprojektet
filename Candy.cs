@@ -18,7 +18,7 @@ namespace Slutprojektet
         public Candy()
         {
             color = colors[generator.Next(colors.Length)];
-            //grid[x,y] = this;
+            
         }
 
 

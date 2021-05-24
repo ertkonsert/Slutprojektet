@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Raylib_cs;
+
 
 namespace Slutprojektet
 {
@@ -8,17 +8,7 @@ namespace Slutprojektet
     {
         static void Main(string[] args)
         {
-            /*
-            Att fixa:
-            - så att ClearMatches faktiskt tar bort ur rutnätet, FUNKAR på horisontella matcher
-            - queues per rad som är 5 långa hela tiden och är redo att lägga till nya godisar  ....no
-            - faktisk tilläggning av nya godisar genom "gravity" oooo
-            - the miracle of interaction with the actual game
-            */
-
-            Random generator = new Random();
-            Queue<Match> matches = new Queue<Match>();
-
+            
             //skapar godisar på varje plats i rutnätet
             for (int y = 0; y < Candy.grid.GetLength(1); y++)
             {
@@ -28,28 +18,12 @@ namespace Slutprojektet
                 }
             }
 
-            //skriver ut rutnätet med godisarna i
-            PrintGrid();
-            Console.ReadLine();
-            matches = CheckMatches(matches);
-            while (matches.Count > 0)
-            {
-                if (matches.Count > 0)
-            {
-                ClearMatches(matches);
-            System.Console.WriteLine("cleared current matches");
-            //skriver ut rutnätet
-            PrintGrid();
-            }
-            else
-            {
-                System.Console.WriteLine("no matches found!");
-            }
-            matches = CheckMatches(matches);
-            Console.ReadLine();
-            }
             
-            System.Console.WriteLine("no matches found!");
+            Update();
+            
+            //interaktion från spelaren
+
+            //update
             
             
             Console.WriteLine();
@@ -58,6 +32,34 @@ namespace Slutprojektet
             
         }
 
+        //går igenom rutnätet och clearar alla godisar av samma färg som är 3+ i rad
+        static void Update()
+        {
+            PrintGrid();
+            Console.ReadLine();
+            Queue<Match> matches = new Queue<Match>();
+            matches = CheckMatches(matches);
+            while (matches.Count > 0)
+            {
+                if (matches.Count > 0)
+                {
+                    ClearMatches(matches);
+                    System.Console.WriteLine("cleared current matches");
+                    PrintGrid();
+                }
+            
+                else
+                {
+                    Console.WriteLine("no matches found!");
+                }
+            
+                matches = CheckMatches(matches);
+                Console.ReadLine();
+            }
+            Console.WriteLine("no matches found!");
+        }
+
+        //skriver ut rutnätet med godisarna i
         static void PrintGrid()
         {
             for (int y = 0; y < Candy.grid.GetLength(1); y++)
@@ -249,7 +251,7 @@ namespace Slutprojektet
                     //körs tills currentMatch.y är 0, då har algoritmen kommit till längst upp i rutnätet och är därmed klar
                     while (currentMatch.y > -1)
                     {
-                        //
+                        
                         for (int j = 0; j < currentMatch.length; j++)
                         {
                             //if sats som ser till att där matchen har korsats med en vertikal match flyttas ingenting
